@@ -1,0 +1,33 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+ 
+ 
+df = pd.read_csv('https://api.covid19india.org/csv/latest/case_time_series.csv')
+df.loc[:, 'Date'] = df.loc[:, 'Date'] + '2020'
+df.loc[:, 'Date'] = pd.to_datetime(df.loc[:, 'Date'])
+df.loc[:, 'Mortality'] = ((df.loc[:, 'Total Deceased'] / df.loc[:, 'Total Confirmed']) * 100)
+df.loc[:, 'Recovery'] = ((df.loc[:, 'Total Recovered'] / df.loc[:, 'Total Confirmed']) * 100)
+ 
+date = df.loc[:, 'Date']
+recovery = df.loc[:, 'Daily Recovered'] / 10
+mortality = df.loc[:, 'Daily Deceased']
+confirmed = df.loc[:, 'Daily Confirmed'] / 10
+ 
+plt.xkcd()
+fig, ax = plt.subplots(figsize=(20, 10))
+ 
+ax.plot(date, mortality, 'r.-', label='Mortality Rate')
+ax.plot(date, recovery, 'g.-', label='Recovery Rate (10X)')
+ax.plot(date, confirmed, 'b.-', label='Daily Cases (10X)')
+ax.grid(True)
+ax.set_ylabel('Trend', fontsize=20)
+ax.set_title('Covid Trend 30th Jan - 19th Aug', fontsize=40)
+ax.set_xlabel('Months', fontsize=20)
+ax.set_xticklabels(['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'], fontsize=40)
+#ax.set_yticklabels(np.arange(0, 21, 1), fontsize=40)
+#ax.set_yticks(np.arange(0, 21, 1))
+ax.legend(fontsize=25)
+ax.grid(True, linewidth=1)
+plt.savefig('test1.png')
+plt.show()
